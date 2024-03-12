@@ -14,7 +14,7 @@ int main()
     }
 
     char *header = lire_donnes_kbs(fichier);
-    printf("FIchier lu %s\n", header);
+    printf("FIchier lu \n%s\n", header);
 
     free(header);
     fclose(fichier);
