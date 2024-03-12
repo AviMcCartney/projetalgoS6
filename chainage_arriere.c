@@ -4,7 +4,7 @@
 // Définition de la structure d'une règle
 typedef struct {
     char Conclusion;
-    char Hypotheses[2];
+    char Hypotheses[3];
     int nb_hypotheses;
 } Rule;
 
@@ -31,8 +31,8 @@ bool ChainageArriere(char But, Rule *Base_de_regles, char *Base_de_faits, int nb
                 // Appel récursif pour vérifier les hypothèses
                 Resultat = Resultat && ChainageArriere(Base_de_regles[i].Hypotheses[j], Base_de_regles, Base_de_faits, nb_regles, nb_faits);
             }
-            // Si toutes les hypothèses sont vérifiées, la conclusion est vérifiée
-            // Sinon, la conclusion n'est pas vérifiée
+            // Si toutes les hypothèses sont satisfaites, la conclusion est satisfaites
+            // Sinon, la conclusion n'est pas satisfaite
             return Resultat;
         }
     }
@@ -43,7 +43,7 @@ bool ChainageArriere(char But, Rule *Base_de_regles, char *Base_de_faits, int nb
 int main() {
     // Déclaration et initialisation des bases de règles et de faits
     Rule Base_de_regles[] = {
-        {'f', {'b', 'd'}, 2},
+        {'f', {'b', 'd', 'e'}, 3},
         {'a', {'g', 'd'}, 2},
         {'a', {'f', 'c'}, 2},
         {'x', {'b'}, 1},
@@ -52,14 +52,19 @@ int main() {
         {'d', {'c'}, 1},
         {'a', {'x', 'c'}, 2},
         {'d', {'x', 'b'}, 2}
-    };
+    };  
     char Base_de_faits[] = {'b', 'c'};
 
     int nb_regles = sizeof(Base_de_regles) / sizeof(Base_de_regles[0]);
     int nb_faits = sizeof(Base_de_faits) / sizeof(Base_de_faits[0]);
 
+    // Choix du but à atteindre
+    char But;
+    printf("Entrez le but a atteindre : ");
+    scanf(" %c", &But);
+
     // Appel de la fonction Chaînage arrière avec le but spécifié
-    bool resultat = ChainageArriere('h', Base_de_regles, Base_de_faits, nb_regles, nb_faits);
+    bool resultat = ChainageArriere(But, Base_de_regles, Base_de_faits, nb_regles, nb_faits);
 
     // Affichage du résultat
     if (resultat)
