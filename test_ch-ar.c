@@ -82,8 +82,16 @@ int infer(char* targetFact) {
     return result;
 }
 
-
 int main() {
+    // Ajout d'une variable pour stocker le fait cible
+    char targetFact[MAX_LENGTH];
+
+    // Demandez à l'utilisateur d'entrer le fait cible
+    printf("Entrez le fait cible : ");
+    fgets(targetFact, MAX_LENGTH, stdin);
+    targetFact[strcspn(targetFact, "\n")] = '\0'; // Supprimer le retour à la ligne
+
+    // Ajoutez les règles comme auparavant
     addRule("b d e", "f");
     addRule("g d", "a");
     addRule("f c", "a");
@@ -94,12 +102,11 @@ int main() {
     addRule("x c", "a");
     addRule("x b", "d");
 
+    // Ajoutez les faits initiaux comme auparavant
     addFact("b", 0); // Le fait initial n'est pas ajouté par une règle
     addFact("c", 0); // Le fait initial n'est pas ajouté par une règle
 
-    char targetFact[MAX_LENGTH];
-    strcpy(targetFact, "h"); // H est le but à prouver
-
+    // Vérifiez si le fait cible peut être prouvé
     if (infer(targetFact)) {
         printf("%s est vrai.\n", targetFact);
         printf("Facts added:\n");
