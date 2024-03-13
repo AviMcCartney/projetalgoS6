@@ -109,7 +109,7 @@ int main() {
     // Vérifiez si le fait cible peut être prouvé
     if (infer(targetFact)) {
         printf("%s est vrai.\n", targetFact);
-        printf("Facts added:\n");
+        printf("Faits ajoutés pour arriver à h en chainage arriere:\n");
         for (int i = 0; i < numFacts; i++) {
             if (factRule[i] != 0) { // Ignorer les faits initiaux
                 printf("R%d %s\n", factRule[i], facts[i]);
