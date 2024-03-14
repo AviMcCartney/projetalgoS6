@@ -20,9 +20,10 @@ typedef struct Fait {
     struct Fait *suiv;
 } Fait;
 
-Regles *liste_de_regles;
-Fait *liste_de_faits;
+extern Regles *liste_de_regles; // Déclaration de la variable externe liste_de_regles
+extern Fait *liste_de_faits; // Déclaration de la variable externe liste_de_faits
 
+// Déclarations des fonctions
 Regles *CreerRegles(char *antecedent, char *consequent, int nb_regles);
 Fait *CreerFaits(char *fact, int nb_regles);
 void AjouterRegle(char *antecedent, char *consequent, int nb_regles);

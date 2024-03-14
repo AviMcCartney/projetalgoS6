@@ -24,21 +24,3 @@ char* recupererLigne(FILE *file, int numeroLigne) {
         return NULL;
     }
 }
-
-int main() {
-    FILE *file = fopen("regles.kbs", "r");
-    if (file == NULL) {
-        perror("Impossible d'ouvrir le fichier");
-        return 1;
-    }
-
-    int ligne = 6; 
-    char *ligneRecuperee = recupererLigne(file, ligne);
-    if (ligneRecuperee != NULL) {
-        printf("%s", ligneRecuperee);
-        free(ligneRecuperee); 
-    }
-
-    fclose(file);
-    return 0;
-}
