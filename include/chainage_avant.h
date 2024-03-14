@@ -7,6 +7,6 @@
 #include <stdio.h>
 #include <stdint.h>
 
-void forward_chaining(Rule *rules, Fact **facts);
+int forward_chaining(Rule *rules, Fact **facts);
 
 #endif // CHAINAGE_AVANT_H

@@ -1,38 +1,61 @@
 // backward_chaining.c
 #include "rule.h"
 #include "fact.h"
-#include "memoire.h"
+#include "chainage_arriere.h"
 #include <string.h>
+#include <stdlib.h>
 
-int backward_chaining(Rule *rules, Fact *facts, char *goal)
+int backward_chaining(Rule *rules, Fact **facts, char *goal)
 {
-    Fact *fact;
-    Rule *rule;
+    Fact *currentFact = *facts;
 
-    for (fact = facts; fact != NULL; fact = fact->next)
+    // Vérifie si le but est déjà un fait connu
+    while (currentFact != NULL)
     {
-        if (strcmp(fact->fact, goal) == 0)
-        {
+        if (strcmp(goal, currentFact->fact) == 0)
             return 1;
-        }
+        currentFact = currentFact->next;
     }
 
-    for (rule = rules; rule != NULL; rule = rule->next)
+    // Parcourt les règles pour trouver une règle dont la conclusion est le but
+    Rule *currentRule = rules;
+    while (currentRule != NULL)
     {
-        if (strcmp(rule->conclusion, goal) == 0)
+        if (strcmp(goal, currentRule->conclusion) == 0)
         {
-            char *premise = strtok(rule->premises, " ");
-            while (premise != NULL)
+            int hypothesis = 1;
+            char *premises = strdup(currentRule->premises); // Duplique les prémisses pour éviter de modifier la règle originale
+            char *saveptr;
+            char *token = strtok_r(premises, " ", &saveptr);
+            while (token != NULL)
             {
-                if (!backward_chaining(rules, facts, premise))
+                int found = 0;
+                currentFact = *facts;
+                while (currentFact != NULL)
                 {
-                    return 0;
+                    if (strcmp(token, currentFact->fact) == 0)
+                    {
+                        found = 1;
+                        break;
+                    }
+                    currentFact = currentFact->next;
                 }
-                premise = strtok(NULL, " ");
+                if (!found)
+                {
+                    hypothesis = backward_chaining(rules, facts, token);
+                    if (!hypothesis)
+                        break;
+                }
+                token = strtok_r(NULL, " ", &saveptr);
             }
-            return 1;
+            free(premises); // Libère la mémoire allouée pour les prémisses dupliquées
+            if (hypothesis)
+            {
+                add_fact(facts, goal);
+                return 1;
+            }
         }
+        currentRule = currentRule->next;
     }
-
     return 0;
 }

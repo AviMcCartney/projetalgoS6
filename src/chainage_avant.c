@@ -4,26 +4,22 @@
 #include "memoire.h"
 #include <string.h>
 
-void forward_chaining(Rule *rules, Fact **facts)
+int forward_chaining(Rule *rules, Fact **facts)
 {
     Rule *rule;
     Fact *fact;
-    int new_facts_added = 1;
+    int new_facts_added = 0;
 
-    while (new_facts_added)
+    for (rule = rules; rule != NULL; rule = rule->next)
     {
-        new_facts_added = 0;
-
-        for (rule = rules; rule != NULL; rule = rule->next)
+        for (fact = *facts; fact != NULL; fact = fact->next)
         {
-            for (fact = *facts; fact != NULL; fact = fact->next)
+            if (strstr(rule->premises, fact->fact) != NULL)
             {
-                if (strstr(rule->premises, fact->fact) != NULL)
-                {
-                    add_fact(facts, rule->conclusion);
-                    new_facts_added = 1;
-                }
+                add_fact(facts, rule->conclusion);
+                new_facts_added = 1;
             }
         }
     }
+    return new_facts_added;
 }

@@ -8,6 +8,6 @@
 #include <stdio.h>
 #include <stdint.h>
 
-int backward_chaining(Rule *rules, Fact *facts, char *goal);
+int backward_chaining(Rule *rules, Fact **facts, char *goal);
 
 #endif // CHAINAGE_ARRIERE_H
