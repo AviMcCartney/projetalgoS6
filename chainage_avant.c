@@ -1,94 +1,107 @@
-#include <stdio.h>
-#include <stdbool.h>
+#include "chainage_arriere.c"
 
-// Définition de la structure d'une règle
-typedef struct {
-    char Conclusion;
-    char Hypotheses[3];
-    int nb_hypotheses;
-} Rule;
-
-// Fonction pour vérifier si une règle est applicable
-bool RegleApplicable(Rule rule, char *Base_de_faits) {
-    for (int i = 0; i < rule.nb_hypotheses; i++) {
-        bool trouve = false;
-        for (int j = 0; j < 3; j++) {
-            if (rule.Hypotheses[i] == Base_de_faits[j]) {
-                trouve = true;
-                break;
-            }
-        }
-        if (!trouve)
-            return false;
+void CreerRegles_av(char* antecedent, char* consequent, int nb_regles) {
+    /*
+    Fonction de création de règles
+    */
+    Regles *regle = (Regles *)malloc(sizeof(Regles));
+    if (regle == NULL) {
+        printf("Échec de l'allocation mémoire !\n");
+        exit(1);
     }
-    return true;
+    strcpy(regle->antecedent, antecedent); // copie la chaîne de caractères des antécédents dans la structure de règle
+    strcpy(regle->consequent, consequent); // copie la chaîne de caractères des conséquences dans la structure de règle
+    regle->nb_regles = nb_regles; // affecte le nombre de règles à la structure de règle
+    regle->suiv = liste_de_regles; 
+    liste_de_regles = regle; // met à jour la tête de la liste de règles vers la nouvelle règle
 }
 
-// Fonction de chaînage avant
-void ChainageAvant(Rule *Base_de_regles, char *Base_de_faits, int nb_regles) {
-    bool faits_ajoutes = true;
+void CreerFaits_av(char* fact, int nb_regles) {
+    /*
+    Fonction de création de faits
+    */
+    Fait *un_fait = (Fait *)malloc(sizeof(Fait));
+    if (un_fait == NULL) {
+        printf("Échec de l'allocation mémoire !\n");
+        exit(1);
+    }
+    strcpy(un_fait->fait, fact); // copie la chaîne de caractères représentant le fait dans la structure de fait
+    un_fait->nb_regles = nb_regles; // affecte le nombre de règles associées au fait dans la structure de fait
+    un_fait->suiv = liste_de_faits;
+    liste_de_faits = un_fait; // met à jour la tête de la liste de faits vers le nouveau fait
+}
 
-    while (faits_ajoutes) {
-        faits_ajoutes = false;
-        for (int i = 0; i < nb_regles; i++) {
-            if (!RegleApplicable(Base_de_regles[i], Base_de_faits))
-                continue;
+void MoteurInference_av() {
+    /*
+    Fonction qui retourne un chemin
+    */
+    int ajoute = 1; // permet de rester dans la boucle tant qu'un fait est ajouté
 
-            bool trouve = false;
-            for (int j = 0; j < 3; j++) {
-                if (Base_de_regles[i].Conclusion == Base_de_faits[j]) {
-                    trouve = true;
-                    break;
-                }
-            }
-            if (!trouve) {
-                for (int k = 0; k < 3; k++) {
-                    if (Base_de_faits[k] == '\0') {
-                        Base_de_faits[k] = Base_de_regles[i].Conclusion;
-                        faits_ajoutes = true;
-                        printf("Nouveau fait ajouté : %c\n", Base_de_regles[i].Conclusion);
+    while (ajoute) {
+        ajoute = 0;
+        Regles *RegleCourante = liste_de_regles; // initialisation de la liste de regle
+        while (RegleCourante != NULL) {
+            int antecedentMatch = 1;
+            char *antecedentToken = strtok(RegleCourante->antecedent, " "); // délimitation par les espaces
+            while (antecedentToken != NULL) { // tant qu'on a un antécédent on continue
+                Fait *FaitCourant = liste_de_faits; // initialisation des faits
+                int trouve = 0;
+                while (FaitCourant != NULL) { // tant qu'on a des faits on continue
+                    if (strcmp(antecedentToken, FaitCourant->fait) == 0) { // vérifie si le token extrait de l'antécédent d'une règle est égal au fait courant de la base de faits
+                        trouve = 1;
                         break;
                     }
+                    FaitCourant = FaitCourant->suiv;
+                }
+                if (!trouve) { // si on ne trouve pas on arrête
+                    antecedentMatch = 0;
+                    break;
+                }
+                antecedentToken = strtok(NULL, " "); // extrait le prochain token de l'antécédent de la règle courante
+            }
+            if (antecedentMatch) {
+                char *consequentToken = strtok(RegleCourante->consequent, " ");
+                while (consequentToken != NULL) {
+                    Fait *FaitCourant = liste_de_faits;
+                    int trouve = 0;
+                    while (FaitCourant != NULL) { // tant qu'on a des faits à traiter on continue
+                        if (strcmp(consequentToken, FaitCourant->fait) == 0) { // vérifie si la conséquence actuelle est égale à un fait existant dans la base de faits 
+                            trouve = 1;
+                            break;
+                        }
+                        FaitCourant = FaitCourant->suiv;
+                    }
+                    if (!trouve) {
+                        CreerFaits_av(consequentToken, RegleCourante->nb_regles); // création d'un nouveau fait dans la base de faits avec la conséquence actuelle
+                        ajoute = 1;
+                    }
+                    consequentToken = strtok(NULL, " "); // passe à la prochaine conséquence de la règle courante
                 }
             }
+            RegleCourante = RegleCourante->suiv; // passe à la règle suivante dans la liste de règles
         }
     }
 }
 
-int main() {
-    // Déclaration et initialisation des bases de règles et de faits
-    Rule Base_de_regles[] = {
-        {'f', {'b', 'd', 'e'}, 3},
-        {'a', {'g', 'd'}, 2},
-        {'a', {'f', 'c'}, 2},
-        {'x', {'b'}, 1},
-        {'d', {'e'}, 1},
-        {'h', {'a', 'x'}, 2},
-        {'d', {'c'}, 1},
-        {'a', {'x', 'c'}, 2},
-        {'d', {'x', 'b'}, 2}
-    };  
-    char Base_de_faits[3] = { 'b', 'c', '\0' }; // Utilisation de '\0' pour marquer la fin des faits
+void AfficheFaits() {
+    /*
+    Fonction d'affichage des faits
+    */
+    printf("Fait ajouté:\n");
+    Fait *FaitCourant = liste_de_faits;
+    Fait **FaitArray = (Fait**)malloc(sizeof(Fait*) * 100);
+    int index = 0;
 
-    int nb_regles = sizeof(Base_de_regles) / sizeof(Base_de_regles[0]);
-
-    // Appel de la fonction de chaînage avant
-    ChainageAvant(Base_de_regles, Base_de_faits, nb_regles);
-
-    // Vérification si le but est atteint
-    bool but_atteint = false;
-    for (int i = 0; i < 3; i++) {
-        if (Base_de_faits[i] == 'h') {
-            but_atteint = true;
-            break;
+    while (FaitCourant != NULL) {
+        if (FaitCourant->nb_regles != 0) {
+            FaitArray[index++] = FaitCourant;
         }
+        FaitCourant = FaitCourant->suiv;
     }
 
-    // Affichage du résultat
-    if (but_atteint)
-        printf("Le but est atteint.\n");
-    else
-        printf("Le but n'est pas atteint.\n");
+    for (int i = index - 1; i >= 0; i--) {
+        printf("R%d %s\n", FaitArray[i]->nb_regles, FaitArray[i]->fait);
+    }
 
-    return 0;
+    free(FaitArray);
 }
