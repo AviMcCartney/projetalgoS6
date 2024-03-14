@@ -33,3 +33,17 @@ void free_rules(Rule *head)
         free(tmp);
     }
 }
+
+void print_rules(Rule *rules)
+{
+    printf("Liste des règles :\n");
+    Rule *current_rule = rules;
+    int rule_number = 1;
+    while (current_rule != NULL)
+    {
+        printf("%d. Si %s alors %s\n", rule_number, current_rule->premises, current_rule->conclusion);
+        current_rule = current_rule->next;
+        rule_number++;
+    }
+    printf("\n");
+}

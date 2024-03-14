@@ -12,5 +12,6 @@ typedef struct Rule
 Rule *create_rule(char *premises, char *conclusion);
 void add_rule(Rule **head, char *premises, char *conclusion);
 void free_rules(Rule *head);
+void print_rules(Rule *rules);
 
 #endif // RULE_H

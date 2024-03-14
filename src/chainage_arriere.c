@@ -7,55 +7,65 @@
 
 int backward_chaining(Rule *rules, Fact **facts, char *goal)
 {
-    Fact *currentFact = *facts;
+    Fact *current_fact = *facts;
 
     // Vérifie si le but est déjà un fait connu
-    while (currentFact != NULL)
+    while (current_fact != NULL)
     {
-        if (strcmp(goal, currentFact->fact) == 0)
-            return 1;
-        currentFact = currentFact->next;
+        if (strcmp(current_fact->fact, goal) == 0)
+        {
+            return 1; // Le fait est déjà dans la liste des faits
+        }
+        current_fact = current_fact->next;
     }
 
-    // Parcourt les règles pour trouver une règle dont la conclusion est le but
-    Rule *currentRule = rules;
-    while (currentRule != NULL)
+    // Parcourt les règles pour trouver celle qui a le but comme conclusion
+    Rule *current_rule = rules;
+    while (current_rule != NULL)
     {
-        if (strcmp(goal, currentRule->conclusion) == 0)
+        if (strcmp(current_rule->conclusion, goal) == 0)
         {
             int hypothesis = 1;
-            char *premises = strdup(currentRule->premises); // Duplique les prémisses pour éviter de modifier la règle originale
-            char *saveptr;
-            char *token = strtok_r(premises, " ", &saveptr);
+            char *token = strtok(current_rule->premises, " ");
+
+            // Pour chaque prémisse de la règle
             while (token != NULL)
             {
                 int found = 0;
-                currentFact = *facts;
-                while (currentFact != NULL)
+                Fact *fact_ptr = *facts;
+
+                // Vérifie si la prémisse est un fait connu
+                while (fact_ptr != NULL)
                 {
-                    if (strcmp(token, currentFact->fact) == 0)
+                    if (strcmp(token, fact_ptr->fact) == 0)
                     {
                         found = 1;
                         break;
                     }
-                    currentFact = currentFact->next;
+                    fact_ptr = fact_ptr->next;
                 }
+
+                // Si la prémisse n'est pas un fait connu, vérifie récursivement
                 if (!found)
                 {
                     hypothesis = backward_chaining(rules, facts, token);
                     if (!hypothesis)
-                        break;
+                        break; // Si une prémisse n'est pas prouvée, sort de la boucle
                 }
-                token = strtok_r(NULL, " ", &saveptr);
+
+                token = strtok(NULL, " ");
             }
-            free(premises); // Libère la mémoire allouée pour les prémisses dupliquées
+
+            // Si toutes les hypothèses sont vérifiées, ajoute le fait à la liste
             if (hypothesis)
             {
                 add_fact(facts, goal);
                 return 1;
             }
         }
-        currentRule = currentRule->next;
+        current_rule = current_rule->next;
     }
+
+    // Si aucune règle ne permet de prouver le but
     return 0;
 }

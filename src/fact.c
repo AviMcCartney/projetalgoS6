@@ -31,3 +31,14 @@ void free_facts(Fact *head)
         free(tmp);
     }
 }
+
+void print_facts(Fact *head)
+{
+    printf("Liste de faits :\n");
+    Fact *current = head;
+    while (current != NULL)
+    {
+        printf("%s\n", current->fact);
+        current = current->next;
+    }
+}

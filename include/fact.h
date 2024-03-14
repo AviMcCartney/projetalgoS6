@@ -11,5 +11,6 @@ typedef struct Fact
 Fact *create_fact(char *fact);
 void add_fact(Fact **head, char *fact);
 void free_facts(Fact *head);
+void print_facts(Fact *head);
 
 #endif // FACT_H
