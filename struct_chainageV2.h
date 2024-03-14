@@ -27,7 +27,9 @@ Regles *CreerRegles(char *antecedent, char *consequent, int nb_regles);
 Fait *CreerFaits(char *fact, int nb_regles);
 void AjouterRegle(char *antecedent, char *consequent, int nb_regles);
 void AjouterFait(char *fact, int nb_regles);
-int MoteurInference(char *but, char *resultatFait);
+int MoteurInference_ar(char *but, char *resultatFait);
+void MoteurInference_av();
+void AfficheFaits();
 void freeRegles();
 void freeFaits();
 

@@ -28,7 +28,7 @@ void AjouterRegle(char *antecedent, char *consequent, int nb_regles) {
     liste_de_regles = regle; // met à jour la tête de la liste de règles vers la nouvelle règle
 }
 
-int MoteurInference(char *but, char *resultatFait) {
+int MoteurInference_ar(char *but, char *resultatFait) {
     /*
     Fonction qui retourne si le but est atteint ou non
     */
