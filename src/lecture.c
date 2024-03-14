@@ -1,17 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "memoire.h"
-
+#include "rule.h"
+/**
+ * @brief Lis toutes les données du fichier .kbs
+ *
+ * @param fichier
+ * @return char*
+ */
 char *lire_donnes_kbs(FILE *fichier)
 {
     int taille = 1024;
-    char *buffer = (char *)malloc(taille * sizeof(char));
-    if (buffer == NULL)
-    {
-        fprintf(stderr, "Erreur d'allocation de mémoire\n");
-        exit(EXIT_FAILURE);
-    }
-
+    char *buffer = (char *)allouer_malloc(taille * sizeof(char));
     int index = 0;
     char c;
     while ((c = fgetc(fichier)) != EOF)
@@ -43,4 +43,17 @@ FILE *ouvrir_fichier(char *chemin_fichier, char *option)
         exit(EXIT_FAILURE);
     }
     return mon_fichier;
+}
+
+int get_ligne(char *buffer)
+{
+    int cpt = 0;
+    Rule ma_rule = {0};
+    char *tmp;
+    for (int i = 0; buffer[i]; i++)
+    {
+        cpt = buffer[i] == '\n' ? cpt + 1 : cpt;
+        printf("%c%s", buffer[i], buffer[i] == '\n' ? "true" : "");
+    }
+    return cpt;
 }

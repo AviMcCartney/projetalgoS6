@@ -1,23 +1,29 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "lecture.h"
+#include "rule.h"
 
 int main()
 {
     FILE *fichier;
-    fichier = fopen("test.kbs", "r");
-
-    if (fichier == NULL)
+    fichier = ouvrir_fichier("test.kbs", "r");
+    int cpt = 0;
+    char *buffer = lire_donnes_kbs(fichier);
+    for (int i = 0; buffer[i]; i++)
     {
-        fprintf(stderr, "Erreur lors de l'ouverture du fichier\n");
-        return EXIT_FAILURE;
+        cpt = buffer[i] == '\n' ? cpt + 1 : cpt;
     }
 
-    char *header = lire_donnes_kbs(fichier);
-    printf("FIchier lu \n%s\n", header);
+    int test = get_ligne(buffer);
+    printf("FIchier lu \n%d\n", test);
 
-    free(header);
+    // char *test = get_ligne(fichier);
+    // printf("FIchier lu \n%s\n", test);
+    // char *test2 = get_ligne(fichier);
+    // printf("FIchier lu \n%s\n", test2);
+
     fclose(fichier);
 
-    return EXIT_SUCCESS;
+    return 0;
 }

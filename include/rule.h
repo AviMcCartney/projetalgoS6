@@ -2,16 +2,15 @@
 #define RULE_H
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef struct
 {
-    char Conclusion;
-    char *Hypotheses;
-    int nb_hypotheses;
-    Rule *suivant;
+    char Conclusion[100];
+    char Hypotheses[100];
+    int ruleNumber;
+    struct Rule *suivant;
 } Rule;
-
-void process_header(Rule *mon_header, char packet80);
-Rule construct_rule(FILE *chemin_fichier);
 
 #endif // RULE_H

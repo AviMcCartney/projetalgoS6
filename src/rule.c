@@ -1,13 +1,11 @@
 #include "rule.h"
+#include "memoire.h"
+#include "lecture.h"
 
-void construct_rule(FILE *chemin_fichier)
-{
-    char *buffer = lire_donnes_kbs(chemin_fichier);
-    int i;
-    while (i < sizeof(buffer))
-    {
-        while (buffer[i] != ';')
-        {
-        }
-    }
-}
+// void process_rule(Rule *ma_rule, const char *hypotheses, const char *conclusion, int numero_rule)
+// {
+//     ma_rule->Hypotheses = strdup(hypotheses);
+//     ma_rule->Conclusion = strdup(conclusion);
+//     ma_rule->nb_hypotheses = numero_rule;
+//     ma_rule->suivant = NULL;
+// }
