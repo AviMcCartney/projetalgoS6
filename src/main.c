@@ -1,29 +1,46 @@
+// main.c
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include "lecture.h"
+
 #include "rule.h"
+#include "fact.h"
+#include "memoire.h"
+#include "lecture.h"
+#include "parse.h"
+#include "chainage_arriere.h"
+#include "chainage_avant.h"
 
 int main()
 {
-    FILE *fichier;
-    fichier = ouvrir_fichier("test.kbs", "r");
-    int cpt = 0;
-    char *buffer = lire_donnes_kbs(fichier);
-    for (int i = 0; buffer[i]; i++)
+    FILE *fichier = ouvrir_fichier("test.kbs", "r");
+    char *donnees = lire_donnes_kbs(fichier);
+    fclose(fichier);
+
+    // Initialisation des listes de règles et de faits
+    Rule *rules = NULL;
+    Fact *facts = NULL;
+
+    // Analyse des données et remplissage des listes de règles et de faits
+    parse_kbs(donnees, &rules, &facts);
+
+    // Test du chaînage avant
+    forward_chaining(rules, &facts);
+
+    // Test du chaînage arrière
+    char *goal = "h";
+    if (backward_chaining(rules, facts, goal))
     {
-        cpt = buffer[i] == '\n' ? cpt + 1 : cpt;
+        printf("Le fait %s peut être prouvé.\n", goal);
+    }
+    else
+    {
+        printf("Le fait %s ne peut pas être prouvé.\n", goal);
     }
 
-    int test = get_ligne(buffer);
-    printf("FIchier lu \n%d\n", test);
-
-    // char *test = get_ligne(fichier);
-    // printf("FIchier lu \n%s\n", test);
-    // char *test2 = get_ligne(fichier);
-    // printf("FIchier lu \n%s\n", test2);
-
-    fclose(fichier);
+    // Libération de la mémoire
+    free_rules(rules);
+    free_facts(facts);
+    free(donnees);
 
     return 0;
 }

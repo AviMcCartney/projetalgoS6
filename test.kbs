@@ -1,0 +1,12 @@
+a b c -> g;
+b d -> e;
+b d e -> f;
+g d -> a;
+f c -> a;
+b -> x;
+e -> d; 
+a x -> h; 
+c -> d;
+x c -> a;
+x b -> d;
+a b c -> g;

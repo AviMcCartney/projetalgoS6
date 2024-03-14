@@ -4,7 +4,6 @@
 #include "rule.h"
 /**
  * @brief Lis toutes les données du fichier .kbs
- *
  * @param fichier
  * @return char*
  */
@@ -48,8 +47,6 @@ FILE *ouvrir_fichier(char *chemin_fichier, char *option)
 int get_ligne(char *buffer)
 {
     int cpt = 0;
-    Rule ma_rule = {0};
-    char *tmp;
     for (int i = 0; buffer[i]; i++)
     {
         cpt = buffer[i] == '\n' ? cpt + 1 : cpt;
