@@ -10,6 +10,7 @@
  */
 #ifndef MEMOIRE_H
 #define MEMOIRE_H
+
 #include <stdio.h>
 #include <stdint.h>
 
