@@ -1,4 +1,13 @@
-// parse.h
+/**
+ * @file parse.h
+ * @author Alexandre, Tom, Yanis, Charlotte
+ * @brief Fichier d'en-tête pour la gestion des données et le parsing.
+ * @version 0.1
+ * @date 2024-03-15
+ *
+ * @copyright Copyright (c) 2024
+ *
+ */
 #ifndef PARSE_H
 #define PARSE_H
 

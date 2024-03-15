@@ -1,4 +1,13 @@
-// fact.h
+/**
+ * @file fact.h
+ * @author Alexandre, Tom, Yanis, Charlotte
+ * @brief Fichier d'en-tête pour la gestion des faits.
+ * @version 0.1
+ * @date 2024-03-15
+ *
+ * @copyright Copyright (c) 2024
+ *
+ */
 #ifndef FACT_H
 #define FACT_H
 

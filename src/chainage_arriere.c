@@ -1,10 +1,27 @@
-// backward_chaining.c
+/**
+ * @file chainage_arriere.c
+ * @author Alexandre, Tom, Yanis, Charlotte
+ * @brief Fichier chainage_arriere.c contenant la procedure backward_chaining()
+ * @version 0.1
+ * @date 2024-03-15
+ *
+ * @copyright Copyright (c) 2024
+ *
+ */
+
 #include "rule.h"
 #include "fact.h"
 #include "chainage_arriere.h"
 #include <string.h>
 #include <stdlib.h>
 
+/**
+ * @brief Effectue un chaînage arrière sur une liste de règles et de faits.
+ * @param rules La liste de règles.
+ * @param facts Un pointeur vers la liste de faits.
+ * @param goal Le fait à prouver.
+ * @return 1 si le fait peut être prouvé, 0 sinon.
+ */
 int backward_chaining(Rule *rules, Fact **facts, char *goal)
 {
     Fact *current_fact = *facts;

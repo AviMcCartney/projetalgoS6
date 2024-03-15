@@ -1,9 +1,9 @@
 /**
  * @file memoire.c
  * @author Alexandre, Tom, Yanis, Charlotte
- * @brief
+ * @brief Fichier memoire.c contenant l'ensemble des fonctions pour les opérations concernant la mémoire
  * @version 0.1
- * @date 2024-03-12
+ * @date 2024-03-15
  *
  * @copyright Copyright (c) 2024
  *
