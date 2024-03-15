@@ -43,8 +43,8 @@ void test()
     add_rule(&rules, "x c", "a");
     add_rule(&rules, "x b", "d");
     add_rule(&rules, "a b c", "g");
-    // add_fact(&facts, "e");
-    // add_fact(&facts, "g");
+    add_fact(&facts, "b");
+    add_fact(&facts, "c");
     print_facts(facts);
     print_rules(rules);
 

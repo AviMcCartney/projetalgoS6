@@ -25,6 +25,7 @@ int main()
 {
     FILE *fichier = ouvrir_fichier("test.kbs", "r");
     char *donnees = lire_donnes_kbs(fichier);
+    int nb_lignes = get_ligne(donnees);
     fclose(fichier);
 
     // Initialisation des listes de règles et de faits
@@ -35,7 +36,19 @@ int main()
     print_facts(facts);
 
     // Analyse des données et remplissage des listes de règles et de faits
-    parse_kbs(donnees, &rules, &facts);
+    char *ligneRecuperee = (char *)malloc(sizeof(char) * nb_lignes);
+    for (int i = 0; i < nb_lignes; i++)
+    {
+        if (i >= 1)
+        {
+            fichier = fopen("test.kbs", "r");
+            ligneRecuperee = recupererLigne(fichier, i);
+            printf("%s", ligneRecuperee);
+            parse_kbs(ligneRecuperee, &rules, &facts);
+            free(ligneRecuperee);
+            fclose(fichier);
+        }
+    }
     print_rules(rules);
 
     // Test du chaînage avant
