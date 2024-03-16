@@ -1,88 +1,61 @@
-/**
- * @file chainage_arriere.c
- * @author Alexandre, Tom, Yanis, Charlotte
- * @brief Fichier chainage_arriere.c contenant la procedure backward_chaining()
- * @version 0.1
- * @date 2024-03-15
- *
- * @copyright Copyright (c) 2024
- *
- */
-
-#include "rule.h"
-#include "fact.h"
-#include "chainage_arriere.h"
-#include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "chainage_arriere.h"
+#include "lecture.h"
 
-/**
- * @brief Effectue un chaînage arrière sur une liste de règles et de faits.
- * @param rules La liste de règles.
- * @param facts Un pointeur vers la liste de faits.
- * @param goal Le fait à prouver.
- * @return 1 si le fait peut être prouvé, 0 sinon.
- */
-int backward_chaining(Rule *rules, Fact **facts, char *goal)
+int ChainageArriere(const char *file, Faits *liste_faits, char but)
 {
-    Fact *current_fact = *facts;
+    FILE *fichier = ouvrir_fichier(file, "r");
 
-    // Vérifie si le but est déjà un fait connu
-    while (current_fact != NULL)
+    char ligne[100];
+    int but_atteint = 0;
+    while (fgets(ligne, sizeof(ligne), fichier))
     {
-        if (strcmp(current_fact->fact, goal) == 0)
+        char ligne_copie[100];
+        strcpy(ligne_copie, ligne);
+        char *premisses = strtok(ligne_copie, "->\n");
+        char *consequences = strtok(NULL, "->\n");
+        if (premisses == NULL || consequences == NULL)
         {
-            return 1; // Le fait est déjà dans la liste des faits
+            printf("Ligne invalide: %s\n", ligne);
+            continue;
         }
-        current_fact = current_fact->next;
-    }
-
-    // Parcourt les règles pour trouver celle qui a le but comme conclusion
-    Rule *current_rule = rules;
-    while (current_rule != NULL)
-    {
-        if (strcmp(current_rule->conclusion, goal) == 0)
+        if (strchr(consequences, but) != NULL)
         {
-            int hypothesis = 1;
-            char *token = strtok(current_rule->premises, " ");
-
-            // Pour chaque prémisse de la règle
-            while (token != NULL)
+            int toutes_prouvees = 1;
+            for (int i = 0; i < strlen(premisses); i++)
             {
-                int found = 0;
-                Fact *fact_ptr = *facts;
-
-                // Vérifie si la prémisse est un fait connu
-                while (fact_ptr != NULL)
+                char caractere = premisses[i];
+                if (caractere == ';' || caractere == ' ' || caractere == '\n')
+                    continue;
+                if (!CaractereDansListe(liste_faits, caractere))
                 {
-                    if (strcmp(token, fact_ptr->fact) == 0)
+                    if (!ChainageArriere(file, liste_faits, caractere))
                     {
-                        found = 1;
+                        toutes_prouvees = 0;
                         break;
                     }
-                    fact_ptr = fact_ptr->next;
                 }
-
-                // Si la prémisse n'est pas un fait connu, vérifie récursivement
-                if (!found)
-                {
-                    hypothesis = backward_chaining(rules, facts, token);
-                    if (!hypothesis)
-                        break; // Si une prémisse n'est pas prouvée, sort de la boucle
-                }
-
-                token = strtok(NULL, " ");
             }
-
-            // Si toutes les hypothèses sont vérifiées, ajoute le fait à la liste
-            if (hypothesis)
+            if (toutes_prouvees)
             {
-                add_fact(facts, goal);
-                return 1;
+                but_atteint = 1;
+                break;
             }
         }
-        current_rule = current_rule->next;
     }
 
-    // Si aucune règle ne permet de prouver le but
-    return 0;
+    fclose(fichier);
+
+    if (but_atteint)
+    {
+        printf("Le but \"%c\" est atteint !\n", but);
+        return 1;
+    }
+    else
+    {
+        printf("Le but \"%c\" n'est pas atteint\n", but);
+        return 0;
+    }
 }

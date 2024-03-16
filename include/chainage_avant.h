@@ -1,23 +1,12 @@
-/**
- * @file chainage_avant.h
- * @author Alexandre, Tom, Yanis, Charlotte
- * @brief Fichier d'en-tête pour la gestion du chaînage avant.
- * @version 0.1
- * @date 2024-03-15
- *
- * @copyright Copyright (c) 2024
- *
- */
-
 #ifndef CHAINAGE_AVANT_H
 #define CHAINAGE_AVANT_H
 
-#include "rule.h"
-#include "fact.h"
-
 #include <stdio.h>
-#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#include "fait.h"
+#include "caractere.h"
 
-int forward_chaining(Rule *rules, Fact **facts);
+Faits *ChainageAvant(const char *file, Faits *liste_faits);
 
 #endif // CHAINAGE_AVANT_H

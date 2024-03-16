@@ -1,41 +1,65 @@
-/**
- * @file chainage_avant.c
- * @author Alexandre, Tom, Yanis, Charlotte
- * @brief Fichier chainage_avant.c contenant la procedure forward_chaining()
- * @version 0.1
- * @date 2024-03-15
- *
- * @copyright Copyright (c) 2024
- *
- */
-
-#include "rule.h"
-#include "fact.h"
-#include "memoire.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include "chainage_avant.h"
+#include "lecture.h"
 
-/**
- * @brief Effectue un chaînage avant sur une liste de règles et de faits.
- * @param rules La liste de règles.
- * @param facts Un pointeur vers la liste de faits.
- * @return 1 si de nouveaux faits ont été ajoutés à la liste de faits, 0 sinon.
- */
-int forward_chaining(Rule *rules, Fact **facts)
+Faits *ChainageAvant(const char *file, Faits *liste_faits)
 {
-    Rule *rule;
-    Fact *fact;
-    int new_facts_added = 0;
+    FILE *fichier = ouvrir_fichier(file, "r");
 
-    for (rule = rules; rule != NULL; rule = rule->next)
+    char ligne[100];
+    int ajout = 1;
+
+    char but[100];
+    printf("Saisir le but à atteindre: ");
+    scanf("%s", but);
+
+    while (ajout)
     {
-        for (fact = *facts; fact != NULL; fact = fact->next)
+        ajout = 0;
+        fseek(fichier, 0, SEEK_SET);
+        while (fgets(ligne, sizeof(ligne), fichier))
         {
-            if (strstr(rule->premises, fact->fact) != NULL)
+            char ligne_copie[100];
+            strcpy(ligne_copie, ligne);
+            char *premisses = strtok(ligne_copie, "->\n");
+            char *consequences = strtok(NULL, "->\n");
+            if (premisses == NULL || consequences == NULL)
             {
-                add_fact(facts, rule->conclusion);
-                new_facts_added = 1;
+                printf("Ligne invalide: %s\n", ligne);
+                continue;
+            }
+            int toutes_presentes = 1;
+            for (int i = 0; i < strlen(premisses); i++)
+            {
+                char caractere = premisses[i];
+                if (!CaractereDansListe(liste_faits, caractere) && caractere != ' ')
+                {
+                    toutes_presentes = 0;
+                    break;
+                }
+            }
+            if (toutes_presentes)
+            {
+                for (int i = 0; i < strlen(consequences); i++)
+                {
+                    char caractere = consequences[i];
+                    if (caractere == ';' || caractere == ' ')
+                        continue;
+                    if (!CaractereDansListe(liste_faits, caractere))
+                    {
+                        liste_faits = AjouterCaractereSiAbsent(liste_faits, caractere);
+                        ajout = 1;
+                    }
+                }
             }
         }
     }
-    return new_facts_added;
+    if (FaitPresent(liste_faits, but))
+        printf("Le but \"%s\" est atteint !\n", but);
+    else
+        printf("Le but \"%s\" n'est pas atteint\n", but);
+    fclose(fichier);
+    return liste_faits;
 }
