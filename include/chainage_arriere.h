@@ -7,6 +7,6 @@
 #include "fait.h"
 #include "caractere.h"
 
-int ChainageArriere(const char *file, Faits *liste_faits, char but);
+int ChainageArriere(const char *file, Faits *liste_faits, char *but);
 
 #endif // CHAINAGE_ARRIERE_H

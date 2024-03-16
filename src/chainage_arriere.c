@@ -4,7 +4,7 @@
 #include "chainage_arriere.h"
 #include "lecture.h"
 
-int ChainageArriere(const char *file, Faits *liste_faits, char but)
+int ChainageArriere(const char *file, Faits *liste_faits, char *but)
 {
     FILE *fichier = ouvrir_fichier(file, "r");
 
@@ -21,15 +21,13 @@ int ChainageArriere(const char *file, Faits *liste_faits, char but)
             printf("Ligne invalide: %s\n", ligne);
             continue;
         }
-        if (strchr(consequences, but) != NULL)
+        if (strstr(consequences, but) != NULL) // permet de comaparer 2 char *
         {
             int toutes_prouvees = 1;
-            for (int i = 0; i < strlen(premisses); i++)
+            char *caractere = strtok(premisses, "; \n");
+            while (caractere != NULL)
             {
-                char caractere = premisses[i];
-                if (caractere == ';' || caractere == ' ' || caractere == '\n')
-                    continue;
-                if (!CaractereDansListe(liste_faits, caractere))
+                if (!FaitPresent(liste_faits, caractere))
                 {
                     if (!ChainageArriere(file, liste_faits, caractere))
                     {
@@ -37,6 +35,7 @@ int ChainageArriere(const char *file, Faits *liste_faits, char but)
                         break;
                     }
                 }
+                caractere = strtok(NULL, "; \n");
             }
             if (toutes_prouvees)
             {
@@ -50,12 +49,12 @@ int ChainageArriere(const char *file, Faits *liste_faits, char but)
 
     if (but_atteint)
     {
-        printf("Le but \"%c\" est atteint !\n", but);
+        printf("Le but \"%s\" est atteint !\n", but);
         return 1;
     }
     else
     {
-        printf("Le but \"%c\" n'est pas atteint\n", but);
+        printf("Le but \"%s\" n'est pas atteint\n", but);
         return 0;
     }
 }
