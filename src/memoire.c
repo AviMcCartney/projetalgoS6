@@ -3,7 +3,7 @@
  * @author Alexandre, Tom, Yanis, Charlotte
  * @brief Fichier memoire.c contenant l'ensemble des fonctions pour les opérations concernant la mémoire
  * @version 0.1
- * @date 2024-03-15
+ * @date 2024-03-17
  *
  * @copyright Copyright (c) 2024
  *

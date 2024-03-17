@@ -1,9 +1,9 @@
 /**
- * @file Fichier lecture.c contenant l'ensemble des fonctions pour la lecture de fichier et de données .kbs
+ * @file lecture.c
  * @author Alexandre, Tom, Yanis, Charlotte
- * @brief
+ * @brief Fichier lecture.c contenant l'ensemble des fonctions pour la lecture de fichier et de données .kbs
  * @version 0.1
- * @date 2024-03-15
+ * @date 2024-03-17
  *
  * @copyright Copyright (c) 2024
  *

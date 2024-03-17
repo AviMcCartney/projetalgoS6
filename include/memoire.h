@@ -14,6 +14,12 @@
 #include <stdio.h>
 #include <stdint.h>
 
+/**
+ * @brief Permet de faire un malloc tout en prenant en compte les erreurs de pointeurs NULL
+ *
+ * @param taille
+ * @return void*
+ */
 void *allouer_malloc(int taille);
 
 #endif // MEMOIRE_H
