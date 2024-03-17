@@ -53,7 +53,7 @@ int main()
             break;
 
         case 3:
-            puts("Nom de l'école (en MAJ) ||| ou mettez en faits les quatre suivant : a,3,c / puis en but à atteindre : + ");
+            puts("Nom de l'école (en MAJ) ||| ou mettez en faits les trois suivant : a,3,c / puis en but à atteindre : + ");
             puts("Pour l'école, dans Combien de faits voulez-vous ajouter ? Entrez 1, puis dans saisir fait : ISEN / but à atteindre : +\n");
             break;
         default:
