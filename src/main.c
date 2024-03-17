@@ -33,27 +33,30 @@ int main()
         switch (choix)
         {
         case 1:
+            puts("Pour le chainage avant, vous disposez d'une grande base règles (+ de 1500 comprenant des caractères spéciaux). Alors n'hésitez pas à tester beaucoup de faits ! (Easter egg : essayez d'obtenir le +)\n");
             liste = AjouterFaits();
             printf("Faits insérés: ");
             AfficherFaits(liste);
-            ChainageAvant("regles1.kbs", liste);
+            ChainageAvant("regles_av.kbs", liste);
             printf("Chainage avant: ");
             AfficherFaits(liste);
             break;
 
         case 2:
+            puts("Pour le chainage arriere, la base de règles disponible est celle du cahier des charges (i.e :b d e -> f)\n");
             liste = AjouterFaits();
             printf("Faits insérés: ");
             AfficherFaits(liste);
             printf("Saisir le but à atteindre: ");
             scanf("%s", but);
-            ChainageArriere("regles1.kbs", liste, but);
-            printf("Chainage arriere: ");
-            AfficherFaits(liste);
+            ChainageArriere("regles_ar.kbs", liste, but);
             break;
 
+        case 3:
+            puts("Nom de l'école (en MAJ) ||| ou mettez en faits les quatre suivant : a,3,c / puis en but à atteindre : + ");
+            puts("Pour l'école, dans Combien de faits voulez-vous ajouter ? Entrez 1, puis dans saisir fait : ISEN / but à atteindre : +\n");
+            break;
         default:
-            printf("Nombre incorrect, saisir à nouveau\n");
             break;
         }
         choix = menu();

@@ -22,9 +22,12 @@
 int menu()
 {
     int nb = -1;
-    printf("\n(0) Quitter\n");
+    printf("\n|-----------------------------------------------------|\n");
+    puts("Choisissez d'effectuer du chainage avant ou arriere :\n");
+    printf("(0) Quitter\n");
     printf("(1) Chainage avant\n");
     printf("(2) Chainage arrière\n");
+    printf("(3) Solution Easter Egg\n");
     printf("Votre choix: ");
     scanf("%d", &nb);
     printf("\n");
